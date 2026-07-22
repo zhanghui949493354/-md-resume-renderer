@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>简历预览 · 张晖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="toolbar no-print">
+    <div class="toolbar-left">
+      <strong>简历预览</strong>
+      <label class="theme-switch">
+        模板
+        <select id="themeSelect" title="切换简历 UI">
+          <option value="muji">木及风（深色顶栏）</option>
+          <option value="classic">经典蓝（蓝标题分隔）</option>
+        </select>
+      </label>
+    </div>
+    <div class="toolbar-right">
+      <label class="btn ghost">
+        上传证件照
+        <input id="avatarInput" type="file" accept="image/jpeg,image/png,image/webp,image/jpg" hidden />
+      </label>
+      <button id="btnClearAvatar" class="btn ghost" type="button">清除照片</button>
+      <label class="btn ghost">
+        导入 MD
+        <input id="fileInput" type="file" accept=".md,.markdown,.txt" hidden />
+      </label>
+      <button id="btnReload" class="btn ghost" type="button">重新加载</button>
+      <button id="btnEdit" class="btn ghost" type="button">编辑 MD</button>
+      <button id="btnPng" class="btn ghost" type="button">导出 PNG</button>
+      <button id="btnPdfPreview" class="btn ghost" type="button">预览 PDF</button>
+      <button id="btnPdf" class="btn primary" type="button">导出 PDF</button>
+    </div>
+  </header>
+
+  <aside id="editorPanel" class="editor-panel no-print" hidden>
+    <div class="editor-bar">
+      <span>编辑 Markdown（保存后即时预览）</span>
+      <button id="btnApply" class="btn primary" type="button">应用并预览</button>
+    </div>
+    <textarea id="mdEditor" spellcheck="false"></textarea>
+  </aside>
+
+  <main class="page-wrap">
+    <article id="resume" class="resume rs-view"></article>
+  </main>
+
+  <div id="pdfPreviewModal" class="pdf-preview-modal no-print" hidden>
+    <div class="pdf-preview-bar">
+      <span>PDF 预览（不调用系统打印，关闭即可）</span>
+      <div class="pdf-preview-actions">
+        <button id="btnPdfPreviewExport" class="btn primary" type="button">从预览导出</button>
+        <button id="btnPdfPreviewClose" class="btn ghost" type="button">关闭</button>
+      </div>
+    </div>
+    <div class="pdf-preview-stage">
+      <div id="pdfPreviewMount" class="pdf-preview-mount"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

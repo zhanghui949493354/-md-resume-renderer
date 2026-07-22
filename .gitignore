@@ -1,0 +1,12 @@
+# 本地 / 隐私
+avatar.jpg
+avatar.png
+avatar.jpeg
+avatar.webp
+photo.jpg
+resume.md
+
+# 系统
+.DS_Store
+Thumbs.db
+*.log
