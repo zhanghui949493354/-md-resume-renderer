@@ -722,6 +722,7 @@ html, body {
     width: 100%;
   }
 
+@media screen and (max-width: 860px) {
   .toolbar-menu-btn {
     display: inline-flex;
     flex: 0 0 auto;
@@ -751,6 +752,7 @@ html, body {
 
   .btn-text-full { display: none; }
   .btn-text-short { display: inline; }
+}
 
   .theme-switch {
     margin-left: 0;
