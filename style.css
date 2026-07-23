@@ -917,6 +917,192 @@ html, body {
 .resume.theme-classic .resume-body h2 span {
   display: inline;
   margin: 0;
+}
+
+/* ===== 主题：玫瑰红顶栏 + 左侧矩形头像 ===== */
+.resume.theme-rose-red {
+  --header-bg: #c91c3c;
+  --header-text: #fff;
+  --h2-bg: #fdf2f3;
+  --h2-border: #c91c3c;
+}
+.resume.theme-rose-red .resume-header {
+  background: var(--header-bg);
+  padding: 6mm 5mm 6mm 4mm;
+  align-items: center;
+  display: flex;
+  gap: 0;
+}
+.resume.theme-rose-red .resume-header .header-main {
+  order: 2;
+  flex: 1;
+  padding-left: 4mm;
+}
+.resume.theme-rose-red .resume-header .avatar-wrap {
+  order: 1;
+  flex: 0 0 28mm;
+  width: 28mm;
+  height: 35mm;
+  background: #e5e7eb;
+}
+.resume.theme-rose-red .resume-header .doc-title {
+  font-size: 16pt;
+}
+.resume.theme-rose-red .resume-body h2 {
+  background: var(--h2-bg);
+  border-left: 3px solid var(--h2-border);
+  padding: 2pt 4pt;
+}
+.resume.theme-rose-red .resume-body h2 span {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0;
+}
+
+/* ===== 主题：蓝色顶栏 + 右侧圆形头像 ===== */
+.resume.theme-blue-circle {
+  --header-bg: #3b82f6;
+  --header-text: #fff;
+  --h2-bg: #eff6ff;
+  --h2-border: #2563eb;
+}
+.resume.theme-blue-circle .resume-header {
+  background: var(--header-bg);
+  padding: 5mm 7mm 4mm 7mm;
+  align-items: flex-start;
+}
+.resume.theme-blue-circle .resume-header .header-main {
+  flex: 1;
+}
+.resume.theme-blue-circle .resume-header .avatar-wrap {
+  flex: 0 0 28mm;
+  text-align: right;
+  width: auto;
+  height: auto;
+  background: transparent;
+}
+.resume.theme-blue-circle .resume-header .avatar {
+  width: 24mm;
+  height: 24mm;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+.resume.theme-blue-circle .resume-header .avatar.placeholder {
+  border-radius: 50%;
+  background: #dbeafe;
+  border-color: #bfdbfe;
+}
+.resume.theme-blue-circle .resume-body h2 {
+  background: var(--h2-bg);
+  border-radius: 8px;
+  padding: 3pt 6pt;
+}
+.resume.theme-blue-circle .resume-body h2 span {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* ===== 主题：浅灰背景 + 右侧固定边栏 ===== */
+.resume.theme-gray-sidebar {
+  --page-bg: #f3f4f6;
+  --sidebar-bg: #0f766e;
+  --sidebar-text: #fff;
+  --content-bg: #ffffff;
+}
+.resume.theme-gray-sidebar {
+  display: flex;
+  padding: 0;
+}
+.resume.theme-gray-sidebar .resume-header {
+  display: none;
+}
+.resume.theme-gray-sidebar .resume-sidebar {
+  width: 32mm;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 6mm 4mm;
+  flex-shrink: 0;
+  min-height: 100%;
+}
+.resume.theme-gray-sidebar .resume-sidebar .avatar-wrap {
+  text-align: center;
+  margin-bottom: 6mm;
+}
+.resume.theme-gray-sidebar .resume-sidebar .avatar {
+  width: 22mm;
+  height: 22mm;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.8);
+  margin: 0 auto 3mm;
+}
+.resume.theme-gray-sidebar .resume-content {
+  flex: 1;
+  background: var(--content-bg);
+  padding: 5mm 4mm 5mm 6mm;
+}
+/* JS 自动包一层，CSS 只做样式 */
+.resume.theme-gray-sidebar .resume-body h2 {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 2pt;
+}
+
+/* ===== 主题：浅灰纹理 + 红色箭头标题 ===== */
+.resume.theme-red-arrow {
+  --page-bg: #f9fafb;
+  --header-bg: transparent;
+  --header-text: #111827;
+  --accent-red: #dc2626;
+  --border-color: #b91c1c;
+}
+.resume.theme-red-arrow {
+  background-image: 
+    linear-gradient(45deg, #e5e7eb 1px, transparent 1px),
+    linear-gradient(-45deg, #e5e7eb 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.resume.theme-red-arrow .resume {
+  background: transparent;
+  box-shadow: none;
+}
+.resume.theme-red-arrow .resume-header {
+  background: transparent;
+  padding: 4mm 6mm;
+  color: var(--header-text);
+}
+.resume.theme-red-arrow .resume-header .doc-title {
+  font-size: 18pt;
+  text-align: left;
+}
+.resume.theme-red-arrow .resume-header .header-cols {
+  width: 100%;
+  justify-content: space-between;
+}
+.resume.theme-red-arrow .resume-body h2 {
+  position: relative;
+  padding-left: 6mm;
+}
+.resume.theme-red-arrow .resume-body h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid var(--accent-red);
+}
+.resume.theme-red-arrow .resume-body h2 span {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding-left: 2mm;
+}
   padding: 0;
   border: none;
   border-radius: 0;

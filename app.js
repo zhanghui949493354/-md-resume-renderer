@@ -214,12 +214,18 @@
   }
 
   function applyTheme(theme) {
-    const t = theme === "classic" ? "classic" : "muji";
-    resumeEl.classList.remove("theme-muji", "theme-classic");
-    resumeEl.classList.add(`theme-${t}`);
-    localStorage.setItem("resume-theme", t);
+    resumeEl.classList.remove("theme-muji", "theme-classic", "theme-rose-red", "theme-blue-circle", "theme-gray-sidebar", "theme-red-arrow");
+    resumeEl.classList.add(`theme-${theme}`);
+    localStorage.setItem("resume-theme", theme);
     const sel = document.getElementById("themeSelect");
-    if (sel) sel.value = t;
+    if (sel) sel.value = theme;
+    // 侧边栏主题需要重包内容结构
+    if (theme === "gray-sidebar") {
+      wrapGraySidebar();
+    } else {
+      unwrapGraySidebar();
+    }
+    scheduleFitResumeScale();
   }
 
   function avatarHtml(src) {
@@ -232,6 +238,47 @@
     return `<button type="button" class="avatar-wrap placeholder-wrap" title="点击上传证件照" id="avatarHit">
       <span class="avatar placeholder">点击上传<br/>证件照</span>
     </button>`;
+  }
+
+  // 灰色右栏主题特殊结构处理
+  let prevSidebarHtml = "";
+  function wrapGraySidebar() {
+    if (!resumeEl) return;
+    const header = resumeEl.querySelector(".resume-header");
+    const body = resumeEl.querySelector(".resume-body");
+    if (!header || !body) return;
+    if (resumeEl.querySelector(".resume-sidebar") && resumeEl.querySelector(".resume-content")) return;
+
+    prevSidebarHtml = header.innerHTML;
+    const avatarPart = header.querySelector(".resume-header > .avatar-wrap");
+
+    const sidebar = document.createElement("div");
+    sidebar.className = "resume-sidebar no-print";
+    if (avatarPart) sidebar.appendChild(avatarPart.cloneNode(true));
+    const contactPart = header.querySelector(".header-cols");
+    if (contactPart) sidebar.innerHTML += contactPart.outerHTML;
+
+    const content = document.createElement("div");
+    content.className = "resume-content";
+    content.appendChild(header.cloneNode(false));
+    content.querySelector(".resume-header").innerHTML = header.innerHTML.replace(avatarPart.outerHTML, "");
+    content.appendChild(body);
+
+    resumeEl.innerHTML = "";
+    resumeEl.appendChild(sidebar);
+    resumeEl.appendChild(content);
+  }
+  function unwrapGraySidebar() {
+    if (!resumeEl || !prevSidebarHtml) return;
+    const sidebar = resumeEl.querySelector(".resume-sidebar");
+    const content = resumeEl.querySelector(".resume-content");
+    if (!sidebar || !content) return;
+    // 恢复结构
+    const header = content.querySelector(".resume-header");
+    const body = content.querySelector(".resume-body");
+    resumeEl.innerHTML = "";
+    if (header) resumeEl.appendChild(header);
+    if (body) resumeEl.appendChild(body);
   }
 
   async function resolveAvatar() {
