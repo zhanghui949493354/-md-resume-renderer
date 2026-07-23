@@ -42,6 +42,40 @@ Windows 也可双击 `启动预览.bat`。
 
 ---
 
+## 部署到 GitHub Pages（别人也能用）
+
+可以。这是纯静态站点，适合用 GitHub 提供的域名访问，例如：
+
+`https://zhanghui949493354.github.io/-md-resume-renderer/`
+
+（仓库名以你实际为准）
+
+### 步骤
+
+1. 仓库设为 **Public**（个人免费账号对私有仓 Pages 有限制；公开仓可免费用）
+2. GitHub 仓库页 → **Settings** → **Pages**
+3. **Build and deployment** → Source 选 **Deploy from a branch**
+4. Branch 选 **`v1`**（或 `main`），文件夹选 **`/ (root)`** → Save
+5. 等 1～2 分钟，打开上面的 `github.io` 链接
+
+### 别人怎么用
+
+打开你的 Pages 链接后：
+
+- 默认加载仓库里的 `resume.example.md`
+- 点 **导入 MD** 上传自己的简历 Markdown
+- 上传证件照、切换主题、导出 PDF/PNG  
+
+证件照和编辑内容存在**对方浏览器本地**，不会写回你的 GitHub。
+
+### 注意
+
+- CDN（marked / html2canvas / 字体）需能访问外网  
+- 不要把带真实手机号的 `resume.md` 推上公开仓库  
+- 改代码后执行 `git push`，Pages 会自动更新  
+
+---
+
 ## 技术路线（简述）
 
 ```text

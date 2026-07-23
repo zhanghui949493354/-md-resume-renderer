@@ -1,8 +1,9 @@
 (() => {
-  // 优先读上级源文件；失败再用本地副本 resume.md
+  // Pages / 本地：优先 resume.md，其次示例；上级真实简历仅本地开发用
   const DEFAULT_MD_PATHS = [
-    "../0721_ai应用开发.md",
     "./resume.md",
+    "./resume.example.md",
+    "../0721_ai应用开发.md",
   ];
 
   const resumeEl = document.getElementById("resume");
@@ -305,6 +306,38 @@
 
     const name = (left[0] || "张晖").split("|")[0].trim();
     document.title = `简历预览 · ${name}`;
+    fitResumeScale();
+  }
+
+  function fitResumeScale() {
+    const scaler = document.getElementById("resumeScaler");
+    if (!scaler || !resumeEl) return;
+
+    resumeEl.style.transform = "";
+    scaler.style.height = "";
+    scaler.style.width = "";
+
+    // 打印 / 导出时不缩放
+    if (window.matchMedia("print").matches) return;
+
+    const pageWrap = scaler.parentElement;
+    const available = Math.max(0, (pageWrap?.clientWidth || window.innerWidth) - 4);
+    const naturalW = resumeEl.offsetWidth;
+    if (!naturalW || available <= 0) return;
+
+    const scale = Math.min(1, available / naturalW);
+    if (scale >= 0.995) return;
+
+    resumeEl.style.transform = `scale(${scale})`;
+    resumeEl.style.transformOrigin = "top center";
+    scaler.style.width = "100%";
+    scaler.style.height = `${Math.ceil(resumeEl.offsetHeight * scale)}px`;
+  }
+
+  let fitScaleTimer = 0;
+  function scheduleFitResumeScale() {
+    window.clearTimeout(fitScaleTimer);
+    fitScaleTimer = window.setTimeout(fitResumeScale, 80);
   }
 
   async function tryFetchMd() {
@@ -323,8 +356,13 @@
   }
 
   function showError(msg) {
-    loadError.hidden = !msg;
-    loadError.textContent = msg || "";
+    const el = document.getElementById("loadError") || loadError;
+    if (!el) {
+      if (msg) console.warn("[resume]", msg);
+      return;
+    }
+    el.hidden = !msg;
+    el.textContent = msg || "";
   }
 
   async function loadInitial() {
@@ -389,6 +427,7 @@
     mount.innerHTML = "";
     const clone = resumeEl.cloneNode(true);
     clone.id = "resumePreviewClone";
+    clone.style.transform = "";
     clone.querySelectorAll(".avatar-tip").forEach((el) => el.remove());
     clone.querySelectorAll("button.avatar-wrap").forEach((btn) => {
       const img = btn.querySelector("img.avatar");
@@ -402,12 +441,24 @@
     mount.appendChild(clone);
     modal.hidden = false;
     document.body.style.overflow = "hidden";
+
+    requestAnimationFrame(() => {
+      const available = mount.clientWidth || window.innerWidth;
+      const naturalW = clone.offsetWidth || 1;
+      const scale = Math.min(1, available / naturalW);
+      clone.style.transform = scale < 0.995 ? `scale(${scale})` : "";
+      clone.style.transformOrigin = "top center";
+      mount.style.minHeight = `${Math.ceil(clone.offsetHeight * scale)}px`;
+    });
   }
 
   function closePdfPreview() {
     const modal = document.getElementById("pdfPreviewModal");
     const mount = document.getElementById("pdfPreviewMount");
-    if (mount) mount.innerHTML = "";
+    if (mount) {
+      mount.innerHTML = "";
+      mount.style.minHeight = "";
+    }
     if (modal) modal.hidden = true;
     document.body.style.overflow = "";
   }
@@ -415,13 +466,29 @@
   function exportPdfNow() {
     const exportName = buildExportFileName();
     const prevTitle = document.title;
+    const prevTransform = resumeEl.style.transform;
+    const scaler = document.getElementById("resumeScaler");
+    const prevScalerH = scaler ? scaler.style.height : "";
+    const prevScalerW = scaler ? scaler.style.width : "";
+
     document.title = exportName;
+    resumeEl.style.transform = "";
+    if (scaler) {
+      scaler.style.height = "";
+      scaler.style.width = "";
+    }
 
     document.documentElement.style.setProperty("-webkit-print-color-adjust", "exact");
     document.documentElement.style.setProperty("print-color-adjust", "exact");
 
     const restore = () => {
       document.title = prevTitle;
+      resumeEl.style.transform = prevTransform;
+      if (scaler) {
+        scaler.style.height = prevScalerH;
+        scaler.style.width = prevScalerW;
+      }
+      scheduleFitResumeScale();
       window.removeEventListener("afterprint", restore);
     };
     window.addEventListener("afterprint", restore);
@@ -448,7 +515,7 @@
 
   document.getElementById("btnPng").addEventListener("click", async () => {
     if (typeof html2canvas !== "function") {
-      showError("html2canvas 未加载，请检查网络后刷新");
+      showError("html2canvas 未加载，请刷新页面（需能访问 ./vendor/html2canvas.min.js）");
       return;
     }
 
@@ -458,36 +525,74 @@
     btn.textContent = "导出中…";
     showError("");
 
-    // 隐藏头像上的「点击更换」等仅预览元素
-    resumeEl.classList.add("exporting-png");
-    const prevMinHeight = resumeEl.style.minHeight;
-    resumeEl.style.minHeight = "auto";
+    // 离屏克隆，避免直接截「带 Google 字体/工具栏」的页面导致卡住
+    const host = document.createElement("div");
+    host.style.cssText =
+      "position:fixed;left:-10000px;top:0;width:210mm;background:#fff;z-index:-1;pointer-events:none;";
+    const clone = resumeEl.cloneNode(true);
+    clone.id = "resumePngClone";
+    clone.classList.add("exporting-png");
+    clone.style.minHeight = "auto";
+    clone.style.boxShadow = "none";
+    clone.querySelectorAll(".avatar-tip, .no-print").forEach((el) => el.remove());
+    // button 换成普通容器，减少 html2canvas 异常
+    clone.querySelectorAll("button.avatar-wrap").forEach((btnEl) => {
+      const wrap = document.createElement("div");
+      wrap.className = "avatar-wrap";
+      wrap.style.cssText = btnEl.style.cssText || "";
+      while (btnEl.firstChild) wrap.appendChild(btnEl.firstChild);
+      btnEl.replaceWith(wrap);
+    });
+    host.appendChild(clone);
+    document.body.appendChild(host);
+
+    const withTimeout = (promise, ms) =>
+      Promise.race([
+        promise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("导出超时，请重试或改用导出 PDF")), ms)
+        ),
+      ]);
 
     try {
-      // 临时去掉阴影，按实际内容高度导出完整界面（无打印页边距）
-      const canvas = await html2canvas(resumeEl, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#ffffff",
-        logging: false,
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: resumeEl.scrollWidth,
-        windowHeight: resumeEl.scrollHeight,
-      });
+      // 等一帧，让离屏节点完成布局
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const canvas = await withTimeout(
+        html2canvas(clone, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: "#ffffff",
+          logging: false,
+          imageTimeout: 5000,
+          foreignObjectRendering: false,
+          removeContainer: true,
+          onclone: (_doc, el) => {
+            el.style.fontFamily =
+              '"Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif';
+            el.querySelectorAll("*").forEach((node) => {
+              if (node.style) {
+                // 避免部分滤镜/复杂阴影拖死引擎
+                if (node.style.filter) node.style.filter = "none";
+              }
+            });
+          },
+        }),
+        20000
+      );
 
       const fileName = `${buildExportFileName()}.png`;
       const link = document.createElement("a");
       link.download = fileName;
       link.href = canvas.toDataURL("image/png");
       link.click();
+      showError("");
     } catch (e) {
       console.error(e);
-      showError("PNG 导出失败，请重试");
+      showError(e.message || "PNG 导出失败，请重试或改用导出 PDF");
     } finally {
-      resumeEl.classList.remove("exporting-png");
-      resumeEl.style.minHeight = prevMinHeight;
+      host.remove();
       btn.disabled = false;
       btn.textContent = prev;
     }
@@ -529,7 +634,36 @@
     themeSelect.value = getTheme();
     themeSelect.addEventListener("change", () => {
       applyTheme(themeSelect.value);
+      scheduleFitResumeScale();
     });
+  }
+
+  const toolbar = document.querySelector(".toolbar");
+  const btnMenu = document.getElementById("btnMenu");
+  if (btnMenu && toolbar) {
+    btnMenu.addEventListener("click", () => {
+      const open = toolbar.classList.toggle("is-open");
+      btnMenu.setAttribute("aria-expanded", open ? "true" : "false");
+      btnMenu.textContent = open ? "收起" : "菜单";
+    });
+    // 点工具栏按钮后自动收起（移动端）
+    document.getElementById("toolbarActions")?.addEventListener("click", (e) => {
+      if (!window.matchMedia("(max-width: 860px)").matches) return;
+      const t = e.target;
+      if (t && (t.closest("button") || t.closest("label.btn"))) {
+        // 文件选择先别立刻收起，等 change 再收
+        if (t.closest("label.btn")) return;
+        toolbar.classList.remove("is-open");
+        btnMenu.setAttribute("aria-expanded", "false");
+        btnMenu.textContent = "菜单";
+      }
+    });
+  }
+
+  window.addEventListener("resize", scheduleFitResumeScale);
+  window.addEventListener("orientationchange", scheduleFitResumeScale);
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(scheduleFitResumeScale);
   }
 
   loadInitial();

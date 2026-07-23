@@ -11,30 +11,37 @@
 </head>
 <body>
   <header class="toolbar no-print">
-    <div class="toolbar-left">
-      <strong>简历预览</strong>
-      <label class="theme-switch">
-        模板
-        <select id="themeSelect" title="切换简历 UI">
-          <option value="muji">木及风（深色顶栏）</option>
-          <option value="classic">经典蓝（蓝标题分隔）</option>
-        </select>
-      </label>
+    <div class="toolbar-top">
+      <div class="toolbar-left">
+        <strong>简历预览</strong>
+        <label class="theme-switch">
+          模板
+          <select id="themeSelect" title="切换简历 UI">
+            <option value="muji">木及风</option>
+            <option value="classic">经典蓝</option>
+          </select>
+        </label>
+      </div>
+      <button id="btnMenu" class="btn ghost toolbar-menu-btn" type="button" aria-expanded="false" aria-controls="toolbarActions">
+        菜单
+      </button>
     </div>
-    <div class="toolbar-right">
+    <div class="toolbar-right" id="toolbarActions">
       <label class="btn ghost">
-        上传证件照
+        <span class="btn-text-full">上传证件照</span><span class="btn-text-short">证件照</span>
         <input id="avatarInput" type="file" accept="image/jpeg,image/png,image/webp,image/jpg" hidden />
       </label>
-      <button id="btnClearAvatar" class="btn ghost" type="button">清除照片</button>
+      <button id="btnClearAvatar" class="btn ghost toolbar-secondary" type="button">清除照片</button>
       <label class="btn ghost">
-        导入 MD
+        <span class="btn-text-full">导入 MD</span><span class="btn-text-short">导入</span>
         <input id="fileInput" type="file" accept=".md,.markdown,.txt" hidden />
       </label>
-      <button id="btnReload" class="btn ghost" type="button">重新加载</button>
-      <button id="btnEdit" class="btn ghost" type="button">编辑 MD</button>
+      <button id="btnReload" class="btn ghost toolbar-secondary" type="button">重新加载</button>
+      <button id="btnEdit" class="btn ghost toolbar-secondary" type="button">编辑 MD</button>
       <button id="btnPng" class="btn ghost" type="button">导出 PNG</button>
-      <button id="btnPdfPreview" class="btn ghost" type="button">预览 PDF</button>
+      <button id="btnPdfPreview" class="btn ghost" type="button">
+        <span class="btn-text-full">预览 PDF</span><span class="btn-text-short">预览</span>
+      </button>
       <button id="btnPdf" class="btn primary" type="button">导出 PDF</button>
     </div>
   </header>
@@ -48,8 +55,12 @@
   </aside>
 
   <main class="page-wrap">
-    <article id="resume" class="resume rs-view"></article>
+    <div class="resume-scaler" id="resumeScaler">
+      <article id="resume" class="resume rs-view"></article>
+    </div>
   </main>
+
+  <p id="loadError" class="load-error no-print" hidden></p>
 
   <div id="pdfPreviewModal" class="pdf-preview-modal no-print" hidden>
     <div class="pdf-preview-bar">
@@ -65,7 +76,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="./vendor/html2canvas.min.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>
