@@ -897,18 +897,18 @@ html, body {
   padding-top: 3mm;
 }
 
-/* 蓝标题 + 通栏下划线 */
+/* 蓝标题（无边框线） */
 .resume.theme-classic .resume-body h2 {
   display: block;
   justify-content: flex-start;
   margin: 7pt 0 5pt;
   padding: 0 0 2.5pt;
-  border-bottom: 1.1pt solid var(--line-blue);
   color: var(--accent-blue);
   font-size: 12pt;
   font-weight: 700;
   letter-spacing: 1px;
   background: none;
+  border-bottom: none;
 }
 
 .resume.theme-classic .resume-body h2::before,
