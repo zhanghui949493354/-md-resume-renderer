@@ -62,7 +62,8 @@ Windows 也可双击 `启动预览.bat`。
 
 打开你的 Pages 链接后：
 
-- 默认加载仓库里的 `resume.example.md`
+- 默认加载仓库里的 `resume.example.md`（**极简占位**，不含真实个人信息）
+- 点 **演示案例** 可加载 `examples/demo-case.md`（**脱敏样例**：学校/公司/姓名等已替换）
 - 点 **导入 MD** 上传自己的简历 Markdown
 - 上传证件照、切换主题、导出 PDF/PNG  
 
@@ -71,7 +72,7 @@ Windows 也可双击 `启动预览.bat`。
 ### 注意
 
 - CDN（marked / html2canvas / 字体）需能访问外网  
-- 不要把带真实手机号的 `resume.md` 推上公开仓库  
+- 不要把带真实手机号、学校、公司的 `resume.md` 推上公开仓库  
 - 改代码后执行 `git push`，Pages 会自动更新  
 
 ---
@@ -100,7 +101,9 @@ Markdown  →  marked 解析 + 自定义预处理  →  HTML/CSS 排版  →  �
 ├── index.html           # 页面与工具栏
 ├── style.css            # 主题与打印样式
 ├── app.js               # 解析、主题、导出
-├── resume.example.md    # 示例简历（已脱敏）
+├── resume.example.md    # 默认极简占位（无真实信息）
+├── examples/
+│   └── demo-case.md     # 脱敏演示案例（点「演示案例」加载）
 ├── 启动预览.bat          # Windows 一键启动
 ├── README.md
 └── docs/

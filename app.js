@@ -1,10 +1,11 @@
 (() => {
-  // Pages / 本地：优先 resume.md，其次示例；上级真实简历仅本地开发用
+  // Pages / 本地：优先 resume.md，其次极简占位；演示案例走「演示案例」按钮
   const DEFAULT_MD_PATHS = [
     "./resume.md",
     "./resume.example.md",
     "../0721_ai应用开发.md",
   ];
+  const DEMO_MD_PATH = "./examples/demo-case.md";
 
   const resumeEl = document.getElementById("resume");
   const editorPanel = document.getElementById("editorPanel");
@@ -397,6 +398,24 @@
     localStorage.removeItem("resume-md-cache");
     // 尝试让用户知悉：改上级 MD 后需同步到 resume.md，或直接导入
     await loadInitial();
+  });
+
+  document.getElementById("btnDemo")?.addEventListener("click", async () => {
+    try {
+      const bust = `?t=${Date.now()}`;
+      const res = await fetch(encodeURI(DEMO_MD_PATH) + bust, { cache: "no-store" });
+      if (!res.ok) throw new Error(`演示案例加载失败（${res.status}）`);
+      const text = await res.text();
+      if (!text.trim()) throw new Error("演示案例为空");
+      setMdNameFromPath(DEMO_MD_PATH);
+      mdEditor.value = text;
+      localStorage.setItem("resume-md-cache", text);
+      await renderMarkdown(text);
+      showError("已加载脱敏演示案例（非真实个人信息）。可用「导入 MD」换自己的简历。");
+    } catch (e) {
+      console.error(e);
+      showError(e.message || "演示案例加载失败");
+    }
   });
 
   // 切回页面时自动拉最新 MD
