@@ -17,7 +17,16 @@
   const AVATAR_CANDIDATES = ["./avatar.jpg", "./avatar.png", "./avatar.jpeg", "./photo.jpg"];
   const AVATAR_KEY = "resume-avatar-dataurl";
   const avatarInput = document.getElementById("avatarInput");
-  let currentMdName = "0721_ai应用开发";
+  let currentMdName = "resume";
+  // 示例/演示案例不展示本机曾上传的证件照（照片只在浏览器 localStorage，不在 GitHub）
+  let useStoredAvatar = true;
+
+  function pathAllowsPersonalAvatar(path) {
+    const p = String(path || "").replace(/\\/g, "/").toLowerCase();
+    if (p.includes("demo-case.md")) return false;
+    if (p.endsWith("resume.example.md")) return false;
+    return true;
+  }
 
   marked.setOptions({ gfm: true, breaks: true });
 
@@ -226,6 +235,8 @@
   }
 
   async function resolveAvatar() {
+    if (!useStoredAvatar) return "";
+
     const cached = localStorage.getItem(AVATAR_KEY);
     if (cached) return cached;
 
@@ -305,7 +316,7 @@
     if (bodyEl) groupExperienceBlocks(bodyEl);
     bindAvatarClick();
 
-    const name = (left[0] || "张晖").split("|")[0].trim();
+    const name = (left[0] || "简历").split("|")[0].trim();
     document.title = `简历预览 · ${name}`;
     fitResumeScale();
   }
@@ -370,6 +381,7 @@
     const fetched = await tryFetchMd();
 
     if (fetched) {
+      useStoredAvatar = pathAllowsPersonalAvatar(fetched.path);
       setMdNameFromPath(fetched.path);
       mdEditor.value = fetched.text;
       await renderMarkdown(fetched.text);
@@ -380,13 +392,16 @@
 
     const saved = localStorage.getItem("resume-md-cache");
     if (saved) {
+      // 缓存可能是演示案例，避免误显示个人证件照
+      useStoredAvatar = !/示例姓名|XX 大学|A 智能科技公司/.test(saved);
       mdEditor.value = saved;
       await renderMarkdown(saved);
       showError("未能读取 MD 文件，已使用本地缓存。可用「导入 MD」加载。");
       return;
     }
 
-    const fallback = `# 求职简历（AI应用算法工程师）\n\n::: left\n\n- 姓名 | 信息\n- 求职意向：AI应用算法工程师\n\n:::\n\n::: right\n\n- 电话：\n- 邮箱：\n\n:::\n\n## 教育经历\n\n请导入 Markdown。\n`;
+    const fallback = `# 求职简历（职位名称）\n\n::: left\n\n- 姓名 | 信息\n- 求职意向：目标岗位\n\n:::\n\n::: right\n\n- 电话：\n- 邮箱：\n\n:::\n\n## 教育经历\n\n请导入 Markdown。\n`;
+    useStoredAvatar = false;
     setMdNameFromPath("resume");
     mdEditor.value = fallback;
     await renderMarkdown(fallback);
@@ -407,11 +422,12 @@
       if (!res.ok) throw new Error(`演示案例加载失败（${res.status}）`);
       const text = await res.text();
       if (!text.trim()) throw new Error("演示案例为空");
+      useStoredAvatar = false;
       setMdNameFromPath(DEMO_MD_PATH);
       mdEditor.value = text;
       localStorage.setItem("resume-md-cache", text);
       await renderMarkdown(text);
-      showError("已加载脱敏演示案例（非真实个人信息）。可用「导入 MD」换自己的简历。");
+      showError("已加载脱敏演示案例（不含个人证件照）。可用「导入 MD」换自己的简历。");
     } catch (e) {
       console.error(e);
       showError(e.message || "演示案例加载失败");
@@ -620,6 +636,7 @@
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files && fileInput.files[0];
     if (!file) return;
+    useStoredAvatar = true;
     setMdNameFromPath(file.name);
     const text = await file.text();
     mdEditor.value = text;
@@ -635,6 +652,7 @@
     try {
       const dataUrl = await fileToAvatarDataUrl(file);
       localStorage.setItem(AVATAR_KEY, dataUrl);
+      useStoredAvatar = true;
       await renderMarkdown(mdEditor.value || (await tryFetchMd())?.text || "");
       showError("");
     } catch (e) {
