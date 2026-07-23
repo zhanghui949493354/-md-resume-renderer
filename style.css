@@ -927,39 +927,115 @@ html, body {
   --header-text: #fff;
   --h2-bg: #fdf2f3;
   --h2-border: #c91c3c;
+  --accent: #c91c3c;
 }
 .resume.theme-rose-red .resume-header {
-  background: var(--header-bg);
-  padding: 6mm 5mm 6mm 4mm;
+  background: linear-gradient(135deg, #c91c3c 0%, #a01530 100%);
+  padding: 5mm 6mm 5mm 5mm;
   align-items: center;
   display: flex;
-  gap: 0;
+  gap: 4mm;
+  position: relative;
+  overflow: hidden;
+}
+.resume.theme-rose-red .resume-header::before {
+  content: "";
+  position: absolute;
+  right: -20mm;
+  top: -10mm;
+  width: 60mm;
+  height: 60mm;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
 }
 .resume.theme-rose-red .resume-header .header-main {
   order: 2;
   flex: 1;
-  padding-left: 4mm;
+  padding-left: 2mm;
 }
 .resume.theme-rose-red .resume-header .avatar-wrap {
   order: 1;
-  flex: 0 0 28mm;
-  width: 28mm;
-  height: 35mm;
-  background: #e5e7eb;
+  flex: 0 0 26mm;
+  width: 26mm;
+  height: 32mm;
+  background: #fff;
+  border: 2px solid rgba(255,255,255,0.9);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.resume.theme-rose-red .resume-header .avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.resume.theme-rose-red .resume-header .avatar.placeholder {
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9pt;
+  color: #9ca3af;
+  text-align: center;
+  line-height: 1.3;
 }
 .resume.theme-rose-red .resume-header .doc-title {
-  font-size: 16pt;
+  font-size: 17pt;
+  font-weight: 700;
+  margin: 0 0 2mm;
+  letter-spacing: 0.5px;
+}
+.resume.theme-rose-red .resume-header .header-cols {
+  gap: 8mm;
+}
+.resume.theme-rose-red .resume-header .col li {
+  font-size: 9.5pt;
+  line-height: 1.6;
+}
+.resume.theme-rose-red .resume-header .col li::before {
+  content: " ";
+  color: rgba(255,255,255,0.7);
+}
+.resume.theme-rose-red .resume-body {
+  padding: 4mm 6mm 6mm;
 }
 .resume.theme-rose-red .resume-body h2 {
   background: var(--h2-bg);
   border-left: 3px solid var(--h2-border);
-  padding: 2pt 4pt;
+  padding: 2.5pt 4pt 2.5pt 3mm;
+  margin: 6pt 0 5pt;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
 }
 .resume.theme-rose-red .resume-body h2 span {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
   padding: 0;
+}
+.resume.theme-rose-red .resume-body h3 {
+  color: #374151;
+  font-size: 10.5pt;
+  font-weight: 600;
+  margin: 4pt 0 2pt;
+}
+.resume.theme-rose-red .exp-title .exp-date {
+  color: #6b7280;
+  font-weight: 400;
+  font-size: 9.5pt;
+}
+.resume.theme-rose-red .tag-row code {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+  font-size: 8.5pt;
+  padding: 1pt 2.5pt;
+}
+.resume.theme-rose-red .resume-body li {
+  line-height: 1.6;
+  margin-bottom: 1.5pt;
 }
 
 /* ===== 主题：蓝色顶栏 + 右侧圆形头像 ===== */
@@ -968,14 +1044,38 @@ html, body {
   --header-text: #fff;
   --h2-bg: #eff6ff;
   --h2-border: #2563eb;
+  --accent: #1e4b8c;
 }
 .resume.theme-blue-circle .resume-header {
-  background: var(--header-bg);
-  padding: 5mm 7mm 4mm 7mm;
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  padding: 6mm 7mm 5mm 7mm;
   align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+.resume.theme-blue-circle .resume-header::before {
+  content: "";
+  position: absolute;
+  right: -15mm;
+  top: -15mm;
+  width: 50mm;
+  height: 50mm;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.resume.theme-blue-circle .resume-header::after {
+  content: "";
+  position: absolute;
+  right: 10mm;
+  bottom: -20mm;
+  width: 40mm;
+  height: 40mm;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
 }
 .resume.theme-blue-circle .resume-header .header-main {
   flex: 1;
+  padding-right: 4mm;
 }
 .resume.theme-blue-circle .resume-header .avatar-wrap {
   flex: 0 0 28mm;
@@ -983,28 +1083,101 @@ html, body {
   width: auto;
   height: auto;
   background: transparent;
+  border: none;
+  box-shadow: none;
 }
 .resume.theme-blue-circle .resume-header .avatar {
-  width: 24mm;
-  height: 24mm;
+  width: 26mm;
+  height: 26mm;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 .resume.theme-blue-circle .resume-header .avatar.placeholder {
   border-radius: 50%;
   background: #dbeafe;
   border-color: #bfdbfe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9pt;
+  color: #6b7280;
+  text-align: center;
+  line-height: 1.3;
+}
+.resume.theme-blue-circle .resume-header .doc-title {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0 0 2mm;
+  letter-spacing: 0.5px;
+}
+.resume.theme-blue-circle .resume-header .header-cols {
+  gap: 10mm;
+}
+.resume.theme-blue-circle .resume-header .col li {
+  font-size: 9.5pt;
+  line-height: 1.6;
+}
+.resume.theme-blue-circle .resume-header .col li::before {
+  content: "";
+  display: none;
+}
+.resume.theme-blue-circle .resume-body {
+  padding: 4mm 7mm 6mm;
 }
 .resume.theme-blue-circle .resume-body h2 {
-  background: var(--h2-bg);
-  border-radius: 8px;
-  padding: 3pt 6pt;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  margin: 7pt 0 5pt;
+  padding: 0 0 2.5pt;
+  border-bottom: 1pt solid #e5e7eb;
+  color: var(--accent);
+  font-size: 12pt;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: none;
+}
+.resume.theme-blue-circle .resume-body h2::before {
+  content: "●";
+  color: var(--h2-border);
+  font-size: 8pt;
 }
 .resume.theme-blue-circle .resume-body h2 span {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
+  padding: 0;
+}
+.resume.theme-blue-circle .resume-body h3 {
+  color: #374151;
+  font-size: 10.5pt;
+  font-weight: 600;
+  margin: 4pt 0 2pt;
+}
+.resume.theme-blue-circle .exp-title .exp-date {
+  color: #6b7280;
+  font-weight: 400;
+  font-size: 9.5pt;
+}
+.resume.theme-blue-circle .tag-row code {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+  font-size: 8.5pt;
+  padding: 1pt 2.5pt;
+}
+.resume.theme-blue-circle .resume-body li {
+  line-height: 1.6;
+  margin-bottom: 1.5pt;
+}
+.resume.theme-blue-circle .exp-block {
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 3mm 4mm;
+  margin-bottom: 3mm;
+  border: 1px solid #e2e8f0;
 }
 
 /* ===== 主题：浅灰背景 + 右侧固定边栏 ===== */
