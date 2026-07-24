@@ -921,139 +921,316 @@ html, body {
   margin: 0;
 }
 
-/* ===== 主题：玫瑰红顶栏 + 左侧矩形头像 ===== */
+/* ===== 主题：红顶左框（WonderCV 酒红风，按参考图复刻） ===== */
 .resume.theme-rose-red {
-  --header-bg: #b81c3e;
-  --header-text: #fff;
-  --h2-bg: #fdf2f4;
-  --h2-border: #c91c3c;
-  --accent: #c91c3c;
+  --rose: #a60024;
+  --rose-light: #d8486a;
+  --rose-title: #a11434;
+  --rose-grad: linear-gradient(90deg, #a60024 0%, #d8486a 100%);
+  --rose-grad-bar: linear-gradient(180deg, #a60024 0%, #c42a48 100%);
+  --rose-bar-bg: linear-gradient(90deg, #fcecef 0%, #ffffff 100%);
+  --ink: #222;
+  --muted: #666;
+  --header-text: #111;
 }
+
 .resume.theme-rose-red .resume-header {
-  background: #b81c3e;
-  background-image:
-    radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 90% 80%, rgba(255,255,255,0.04) 0%, transparent 40%);
-  padding: 5mm 6mm 5mm 5mm;
-  align-items: center;
   display: flex;
-  gap: 5mm;
-  position: relative;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  background: transparent;
   overflow: hidden;
+  position: relative;
+  min-height: 34mm;
 }
-/* 装饰弧线 */
-.resume.theme-rose-red .resume-header::before {
-  content: "";
-  position: absolute;
-  right: -30mm;
-  top: -20mm;
-  width: 80mm;
-  height: 80mm;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-radius: 50%;
-}
-.resume.theme-rose-red .resume-header::after {
-  content: "";
-  position: absolute;
-  right: -10mm;
-  bottom: -30mm;
-  width: 60mm;
-  height: 60mm;
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 50%;
-}
+
+/* 右侧酒红渐变底 + 波浪装饰 */
 .resume.theme-rose-red .resume-header .header-main {
   order: 2;
   flex: 1;
-  padding-left: 2mm;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5mm 8mm 5mm 6mm;
+  background-color: #a60024;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='160' viewBox='0 0 320 160'%3E%3Cpath fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='1.2' d='M40 120 C80 40 140 40 180 90 C220 140 280 130 340 60'/%3E%3Cpath fill='none' stroke='rgba(255,255,255,0.12)' stroke-width='1' d='M20 140 C70 60 130 50 170 100 C210 150 270 140 330 80'/%3E%3Cpath fill='none' stroke='rgba(255,255,255,0.09)' stroke-width='1' d='M60 150 C100 80 160 70 200 110 C240 150 290 145 340 100'/%3E%3C/svg%3E"),
+    var(--rose-grad);
+  background-repeat: no-repeat, no-repeat;
+  background-position: right -10mm center, center;
+  background-size: 90mm 40mm, cover;
+  border-radius: 5mm 0 0 5mm;
+  color: #111;
   z-index: 1;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
+
 .resume.theme-rose-red .resume-header .avatar-wrap {
   order: 1;
-  flex: 0 0 28mm;
-  width: 28mm;
-  height: 35mm;
+  flex: 0 0 32mm;
+  width: 32mm;
+  height: auto;
+  align-self: stretch;
+  margin: 0;
+  padding: 2.5mm;
+  box-sizing: border-box;
   background: #fff;
-  border: 2px solid rgba(255,255,255,0.9);
-  border-radius: 2px;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  z-index: 1;
+  z-index: 2;
 }
-.resume.theme-rose-red .resume-header .avatar {
+
+.resume.theme-rose-red .resume-header .avatar,
+.resume.theme-rose-red .resume-header .avatar.placeholder {
   width: 100%;
   height: 100%;
+  min-height: 29mm;
   object-fit: cover;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: #e8e8e8;
 }
+
 .resume.theme-rose-red .resume-header .avatar.placeholder {
-  background: #f3f4f6;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 9pt;
   color: #9ca3af;
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.35;
 }
+
+/* 参考图：姓名为大号黑色字压在酒红底上 */
 .resume.theme-rose-red .resume-header .doc-title {
-  font-size: 18pt;
+  margin: 0 0 2.5mm;
+  font-size: 22pt;
   font-weight: 700;
-  margin: 0 0 2mm;
   letter-spacing: 0.5px;
-  color: #fff;
+  line-height: 1.15;
+  color: #111;
 }
+
 .resume.theme-rose-red .resume-header .header-cols {
-  gap: 12mm;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2mm 8mm;
+  width: 100%;
+  max-width: 100%;
 }
-.resume.theme-rose-red .resume-header .col li {
-  font-size: 9.5pt;
-  line-height: 1.7;
-  color: rgba(255,255,255,0.9);
-}
-.resume.theme-rose-red .resume-header .col li::before {
-  content: " ";
-  color: rgba(255,255,255,0.5);
-}
-.resume.theme-rose-red .resume-body {
-  padding: 4mm 6mm 6mm;
-}
-.resume.theme-rose-red .resume-body h2 {
-  background: var(--h2-bg);
-  border-left: 3px solid var(--h2-border);
-  padding: 3pt 4pt 3pt 3mm;
-  margin: 7pt 0 5pt;
-  font-size: 11.5pt;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: 0.5px;
-}
-.resume.theme-rose-red .resume-body h2 span {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
+
+.resume.theme-rose-red .resume-header .col ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 3mm;
+  list-style: none;
+  margin: 0;
   padding: 0;
 }
-.resume.theme-rose-red .resume-body h3 {
-  color: #1f2937;
-  font-size: 10.5pt;
-  font-weight: 600;
-  margin: 4pt 0 1pt;
+
+.resume.theme-rose-red .resume-header .col li {
+  position: static;
+  padding-left: 0;
+  margin: 0;
+  font-size: 9.5pt;
+  line-height: 1.55;
+  color: #222;
+  white-space: nowrap;
+  list-style: none;
 }
+
+.resume.theme-rose-red .resume-header .col li::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* 联系方式视觉分隔：右侧列项之间加 |（不是圆点） */
+.resume.theme-rose-red .resume-header .col.right li + li::before {
+  content: "|" !important;
+  display: inline !important;
+  position: static;
+  width: auto;
+  height: auto;
+  margin-right: 2.5mm;
+  background: none;
+  color: #444;
+}
+
+.resume.theme-rose-red .resume-header .col.right ul {
+  align-items: center;
+}
+
+.resume.theme-rose-red .resume-body {
+  padding: 5mm 7mm 7mm;
+  color: #333;
+}
+
+/* 章节：浅粉→白渐变底 + 左侧酒红竖条 + 酒红实色标题 */
+.resume.theme-rose-red .resume-body h2 {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 5mm 0 3mm;
+  padding: 0;
+  background: var(--rose-bar-bg);
+  border: none;
+  border-radius: 0;
+  font-size: 11.5pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.3;
+  overflow: hidden;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.resume.theme-rose-red .resume-body h2::before {
+  content: "" !important;
+  display: block !important;
+  flex: 0 0 1.2mm;
+  width: 1.2mm;
+  align-self: stretch;
+  min-height: 7mm;
+  margin: 0;
+  border: none !important;
+  background: var(--rose-title) !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.resume.theme-rose-red .resume-body h2::after {
+  display: none !important;
+  content: none !important;
+  flex: 0;
+  border: none;
+}
+
+.resume.theme-rose-red .resume-body h2 span {
+  display: inline-block;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 2.2mm 0 2.2mm 3mm;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: var(--rose-title);
+  color: var(--rose-title);
+  font-weight: 700;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.resume.theme-rose-red .resume-body h3,
+.resume.theme-rose-red .exp-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4mm;
+  margin: 3.5mm 0 1mm;
+  color: #111;
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+
+.resume.theme-rose-red .exp-title .exp-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  color: #111;
+}
+
 .resume.theme-rose-red .exp-title .exp-date {
-  color: #6b7280;
+  flex: 0 0 auto;
+  color: #666;
   font-weight: 400;
   font-size: 9.5pt;
 }
+
+.resume.theme-rose-red .exp-title .exp-date::before {
+  content: none;
+}
+
+.resume.theme-rose-red .resume-body p {
+  margin: 0 0 2mm;
+  color: #333;
+  line-height: 1.55;
+}
+
+/* 列表：只保留自定义小方点，去掉 disc，避免双圆点 */
+.resume.theme-rose-red .resume-body ul {
+  list-style: none !important;
+  margin: 1mm 0 2mm;
+  padding-left: 0;
+}
+
+.resume.theme-rose-red .resume-body li {
+  position: relative;
+  margin: 0 0 1.2mm;
+  padding-left: 3.5mm;
+  color: #333;
+  line-height: 1.55;
+  list-style: none !important;
+}
+
+.resume.theme-rose-red .resume-body li::marker {
+  content: none;
+}
+
+.resume.theme-rose-red .resume-body > ul > li::before,
+.resume.theme-rose-red .exp-block > ul > li::before,
+.resume.theme-rose-red .resume-body ul ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 1.15mm;
+  height: 1.15mm;
+  border-radius: 0;
+  background: #333;
+}
+
+.resume.theme-rose-red .resume-body ul ul {
+  list-style: none !important;
+  padding-left: 0;
+  margin-top: 0.6mm;
+}
+
+.resume.theme-rose-red .tag-row {
+  margin: 1mm 0 2mm;
+  list-style: none;
+}
+
 .resume.theme-rose-red .tag-row code {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #991b1b;
+  display: inline-block;
+  background: #f8f4f5;
+  border: 0.3mm solid #ecdde1;
+  color: #7a2a3a;
   font-size: 8.5pt;
   padding: 1pt 2.5pt;
+  border-radius: 2px;
+  list-style: none;
 }
-.resume.theme-rose-red .resume-body li {
-  line-height: 1.65;
-  margin-bottom: 1pt;
+
+.resume.theme-rose-red .tag-row code::before,
+.resume.theme-rose-red .tag-row code::after {
+  content: none !important;
+}
+
+.resume.theme-rose-red .exp-block {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 0 2mm;
+  border-radius: 0;
 }
 
 /* ===== 主题：蓝色顶栏 + 右侧圆形头像 ===== */
